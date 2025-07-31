@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 func main() {
@@ -25,12 +26,19 @@ func handlePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Optional: Use the URL path as the filename (e.g., PUT /file.txt)
-	fileName := filepath.Base(r.URL.Path)
-	if fileName == "" || fileName == "/" {
+	// Extract the base file name from the URL path
+	originalFileName := filepath.Base(r.URL.Path)
+	if originalFileName == "" || originalFileName == "/" {
 		http.Error(w, "File name missing in URL path", http.StatusBadRequest)
 		return
 	}
+
+	// Generate the date-time prefix: "YYYY-MM-DD-HH-"
+	now := time.Now()
+	dateTimePrefix := now.Format("2006-01-02-15-") // 24-hour format
+
+	// Create the full filename with prefix
+	fileName := dateTimePrefix + originalFileName
 
 	// Open file for writing
 	outFile, err := os.Create(fileName)
