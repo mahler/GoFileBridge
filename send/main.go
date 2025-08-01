@@ -3,18 +3,23 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 )
 
 func main() {
-	// File path and target URL
-	filePath := "example.txt"                    // Replace with your actual file path
-	targetURL := "http://localhost:8182/hello.txt"  // Replace with your target URL
+	// Check for filename argument
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: go run main.go <filename>")
+		os.Exit(1)
+	}
+
+	filePath := os.Args[1]
+	targetURL := "http://localhost:8182/" + filePath // Adjust target URL to use filename
 
 	// Read the file content
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		fmt.Printf("Error reading file: %v\n", err)
 		os.Exit(1)
@@ -43,6 +48,6 @@ func main() {
 	fmt.Printf("Response Status: %s\n", resp.Status)
 
 	// Optionally, print response body
-	respBody, _ := ioutil.ReadAll(resp.Body)
+	respBody, _ := io.ReadAll(resp.Body)
 	fmt.Printf("Response Body:\n%s\n", string(respBody))
 }
