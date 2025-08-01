@@ -33,12 +33,12 @@ func handlePut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate the date-time prefix: "YYYY-MM-DD-HH-"
+	// Generate the date-time prefix: "YYYY-MM-DD-HH-MM-"
 	now := time.Now()
-	dateTimePrefix := now.Format("2006-01-02-15-") // 24-hour format
+	dateTimePrefix := now.Format("2006-01-02-15-01-") // 24-hour format
 
 	// Create the full filename with prefix
-	fileName := dateTimePrefix + originalFileName
+	fileName := "./files/" + dateTimePrefix + originalFileName
 
 	// Open file for writing
 	outFile, err := os.Create(fileName)
